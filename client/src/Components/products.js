@@ -3,13 +3,8 @@ import ProductList from "./productList";
 import formatAmount from "../services/formatAmount"
 
 const Products = () => {
-  const Message = ({ message }) => (
-    <section>
-      <p>{message}</p>
-    </section>
-  );
 
-  const [message, setMessage] = useState("");
+
   const [products, setProducts] = useState([]);
  
   useEffect(() => {
@@ -22,24 +17,11 @@ const Products = () => {
 
     };
 
-    const query = new URLSearchParams(window.location.search);
-
-    if (query.get("success")) {
-      setMessage("Order placed! You will receive an email confirmation.");
-    }
-
-    if (query.get("canceled")) {
-      setMessage(
-        "Order canceled -- continue to shop around and checkout when you're ready."
-      );
-    }
 
     product();
   },[]);
 
-  return ( message ? (
-      <Message message={message} />
-    ) : (
+  return ( 
     <div className="productGrid">
       {products.map((x) => {
         return (
@@ -55,7 +37,6 @@ const Products = () => {
       })}
     </div>
     )
-  );
 };
 
 export default Products;
