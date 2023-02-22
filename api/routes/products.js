@@ -1,10 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const db = require("../db");
 const stripe = require("stripe")(
   "sk_test_51LLga0Lh8BBWwJ2do9sDSkHrSDO2nMTXkWVGEpK6CutJH84yLKSaZGNoNvziqhV2Dls1nxdPVoyh66QH6FDVKv4I00vciEpFP7"
 );
-
 const YOUR_DOMAIN = "http://localhost:3000";
 
 router.post("/create-checkout-session", async (req, res) => {
@@ -27,7 +25,6 @@ router.get("/products", async function (req, res, next) {
   const products = await stripe.products.list({
     limit: 999,
   });
-
   const prices = await stripe.prices.list({
     limit: 999,
   });
