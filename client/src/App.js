@@ -5,7 +5,10 @@ function App() {
   return (
     <>
       <h1 className="title">Splitzanorm</h1>
-      <h2 className="subHeading">Products</h2>
+      <h2 onClick={() => window.location.reload()} className="subHeading">
+        Products
+      </h2>
+
       <Products />
     </>
   );

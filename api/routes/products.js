@@ -29,17 +29,28 @@ router.get("/products", async function (req, res, next) {
     limit: 999,
   });
 
-  const productAndPrice = { products: products, prices: prices };
-  const arr1 = productAndPrice.products.data;
-  const arr2 = productAndPrice.prices.data;
+  const arr1 = products.data;
+  const arr2 = prices.data;
 
   const output = arr1.map((el) => ({
-    product: {
-      ...el,
-      price: arr2.find((x) => x.product === el.id).unit_amount,
-    },
+    ...el,
+    price: arr2.find((x) => x.product === el.id).unit_amount,
   }));
   res.status(200).send(output);
+});
+
+router.post("/search", async function (req, res, next) {
+  const searchInput = req.body.search;
+  if (!searchInput) {
+    res.status(400).send("bad search");
+  }
+
+  if (searchInput) {
+    const product = await stripe.products.search({
+      query: `description~"${searchInput}" OR name~"${searchInput}"`,
+    });
+    res.status(200).send(product);
+  }
 });
 
 module.exports = router;
