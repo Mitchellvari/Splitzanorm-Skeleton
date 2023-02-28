@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ products, setSearchProducts }) => {
+const SearchBar = ({ setCount, setSearchProducts }) => {
   const [searchInput, setSearchInput] = useState("");
 
   const handleChange = (e) => {
@@ -21,7 +21,7 @@ const SearchBar = ({ products, setSearchProducts }) => {
     const data = await response.json();
 
     const result = data.data.map((x) => x.id);
-
+    setCount(1);
     setSearchProducts(result);
   };
 

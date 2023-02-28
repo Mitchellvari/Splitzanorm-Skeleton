@@ -1,37 +1,66 @@
 import React, { useEffect, useState } from "react";
-import ProductList from "./productList";
+import ProductList from "./ProductList";
 import formatAmount from "../services/formatAmount";
-import SearchBar from "./searchBar";
+import SearchBar from "./SearchBar";
+import Filter from "./Filter";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState([]);
   const [count, setCount] = useState(0);
   const [allProducts, setAllProducts] = useState([]);
+  const [selectValue, setSelectValue] = useState("Highest");
   useEffect(() => {
     const product = async () => {
       if (count === 0) {
         const response = await fetch("http://localhost:5001/products");
 
         const data = await response.json();
-        setProducts(data);
-        setAllProducts(data);
-        setCount(1);
+        const ascending = data.sort(
+          (a, b) => Number(a.price) - Number(b.price)
+        );
+        setProducts(ascending);
+        setAllProducts(ascending);
+
+        if (selectValue === "Lowest") {
+          const descending = products.sort(
+            (a, b) => Number(b.price) - Number(a.price)
+          );
+          setProducts(descending);
+        }
       }
     };
-    console.log(searchProducts);
+
     product();
 
     const searchResults = allProducts.filter((product) =>
       searchProducts.includes(product.id)
     );
-    console.log(searchResults);
-    console.log(products);
-    setProducts(searchResults);
-  }, [searchProducts]);
+
+    if (count === 1) {
+      if (selectValue === "Lowest") {
+        const descending = searchResults.sort(
+          (a, b) => Number(b.price) - Number(a.price)
+        );
+        setProducts(descending);
+      }
+
+      if (selectValue === "Highest") {
+        const ascending = searchResults.sort(
+          (a, b) => Number(a.price) - Number(b.price)
+        );
+        setProducts(ascending);
+      }
+    }
+  }, [searchProducts, selectValue]);
 
   return (
     <>
-      <SearchBar products={products} setSearchProducts={setSearchProducts} />
+      <SearchBar
+        products={products}
+        setSearchProducts={setSearchProducts}
+        setCount={setCount}
+      />
+      <Filter selectValue={selectValue} setSelectValue={setSelectValue} />
       <div className="productGrid">
         {products.map((x) => {
           return (

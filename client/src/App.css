@@ -31,3 +31,8 @@
 .search {
   margin-left: 2rem;
 }
+
+.selectBox {
+  position: absolute;
+  right: 2rem;
+}
